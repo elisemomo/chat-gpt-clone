@@ -42,7 +42,7 @@ pipeline{
         }
         stage('OWASP FS SCAN') {
             steps {
-                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
+                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'Dependency-Check'
                 dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
             }
         }
@@ -51,14 +51,22 @@ pipeline{
                 sh "trivy fs . > trivyfs.json"
             }
         }
-        stage("Docker Build & Push"){
+        stage('Login to DockerHUB') {
+            steps {
+                script {
+                    sh "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"
+                    echo 'Login Succeeded'
+                }
+            }
+        }
+        stage("Docker Build and Push"){
             steps{
                 script{
-                   withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){
-                       sh "docker build -t chatbot ."
-                       sh "docker tag chatbot mukomelise/chat-gpt-clone:latest "
-                       sh "docker push mukomelise/chat-gpt-clone:latest "
-                    }
+                       sh "docker build -t chat-gpt-clone ."
+
+                       sh 'docker tag chat-gpt-clone:latest mukomelise/chat-gpt-clone:latest'
+                       
+                       sh "docker push mukomelise/chat-gpt-clone:latest"
                 }
             }
         }
@@ -69,8 +77,8 @@ pipeline{
         }
         stage ("Remove container") {
             steps{
-                sh "docker stop chatbot | true"
-                sh "docker rm chatbot | true"
+                sh "docker stop chat-gpt-clone | true"
+                sh "docker rm chat-gpt-clone | true"
              }
         }
         stage('Deploy to container'){
