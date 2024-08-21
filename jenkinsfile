@@ -5,13 +5,20 @@ pipeline{
         nodejs 'NodeJs'
     }
     environment {
-        SCANNER_HOME=tool 'sonar_scanner'
+        DOCKERHUB_CREDENTIALS = credentials('Docker_hub')
+        SCANNER_HOME =tool 'sonar_scanner'
     }
     stages {
-        stage('Checkout from Git'){
+         stage("Clean work space"){
+            steps{
+                cleanWs()
+            }
+        }
+        stage('checkout'){
             steps{
                 git branch: 'prod', url: 'https://github.com/elisemomo/chat-gpt-clone.git'
             }
+        }
         }
         stage('Install Dependencies') {
             steps {
