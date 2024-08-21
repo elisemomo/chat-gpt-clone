@@ -10,7 +10,7 @@ pipeline{
     stages {
         stage('Checkout from Git'){
             steps{
-                git branch: 'legacy', url: 'https://github.com/elisemomo/chat-gpt-clone.git'
+                git branch: 'prod', url: 'https://github.com/elisemomo/chat-gpt-clone.git'
             }
         }
         stage('Install Dependencies') {
