@@ -83,7 +83,7 @@ pipeline{
         }
         stage('Deploy to container'){
             steps{
-                sh 'docker run -d --name chatbot -p 3000:5050 mukomelise/chat-gpt-clone:latest'
+                sh 'docker run -d --name chatbot -p 3333:3000 mukomelise/chat-gpt-clone:latest'
             }
         }
     }
