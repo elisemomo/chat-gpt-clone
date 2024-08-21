@@ -28,7 +28,7 @@ pipeline{
         stage("Sonarqube Analysis "){
             steps{
                 withSonarQubeEnv('sonar-server') {
-                    sh ''' $SCANNER_HOME/bin/sonar_scanner -Dsonar.projectName=chat-gpt-clone \
+                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=chat-gpt-clone \
                     -Dsonar.projectKey=chat-gpt-clone '''
                 }
             }
