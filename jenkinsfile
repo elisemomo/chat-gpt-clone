@@ -19,7 +19,7 @@ pipeline{
                 git branch: 'prod', url: 'https://github.com/elisemomo/chat-gpt-clone.git'
             }
         }
-        }
+        
         stage('Install Dependencies') {
             steps {
                 sh "npm install"
